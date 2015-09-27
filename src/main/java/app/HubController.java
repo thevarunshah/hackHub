@@ -1,5 +1,7 @@
 package app;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -13,18 +15,33 @@ import org.springframework.web.bind.annotation.RestController;
 public class HubController {
 	
     private final AtomicLong hackathonsID = new AtomicLong();
-    
+    	
     private HashMap<String, Organizer> organizers = new HashMap<String, Organizer>();
     private HashMap<Long, Hackathon> hackathons = new HashMap<Long, Hackathon>();
     
+    @RequestMapping("/demo")
+    public EmptyJSONResponse demo(){
+    	
+    	Organizer demo = new Organizer("demo", "pass", "Varun Shah", "contact@hackru.org");
+    	Hackathon hackRU = new Hackathon(hackathonsID.incrementAndGet(), "hackRU", "Rutgers", "10/03/15", "10/04/15", demo);
+    	hackRU.setDescription("the best hackathon");
+    	hackRU.getAnnouncements().add("registration closed!");
+    	hackRU.getAnnouncements().add("get pumped!");
+    	hackathons.put(hackRU.getId(), hackRU);
+    	organizers.put("demo", demo);
+    	
+    	return new EmptyJSONResponse();
+    }
+    
     @RequestMapping("/register")
-    public ResponseEntity register(@RequestParam(value="username", required=true) String username, @RequestParam(value="password", required=true) String password){
+    public ResponseEntity register(@RequestParam(value="username", required=true) String username, @RequestParam(value="password", required=true) String password,
+    								@RequestParam(value="name", required=true) String name, @RequestParam(value="email", required=true) String email){
     	
     	if(organizers.containsKey(username)){
     		return new ResponseEntity<EmptyJSONResponse>(new EmptyJSONResponse(), HttpStatus.OK);
     	}
     	
-    	Organizer organizer = new Organizer(username, password);
+    	Organizer organizer = new Organizer(username, password, name, email);
     	organizers.put(organizer.getUsername(), organizer);
     	return new ResponseEntity<Organizer>(organizer, HttpStatus.OK);
     }
@@ -41,6 +58,12 @@ public class HubController {
     	}
     	
     	return new ResponseEntity<EmptyJSONResponse>(new EmptyJSONResponse(), HttpStatus.OK);
+    }
+    
+    @RequestMapping("/allHackathons")
+    public Collection<Hackathon> allHackathons(){
+    	
+    	return hackathons.values();
     }
 
     @RequestMapping("/newHackathon")
@@ -97,8 +120,19 @@ public class HubController {
     	return new ResponseEntity<Hackathon>(hackathon, HttpStatus.OK); 
     }
     
-    @RequestMapping("addAnouncement")
-    public ResponseEntity addAnouncement(@RequestParam(value="id", required=true) long id, @RequestParam(value="anouncement", required=true) String anouncement){
+    @RequestMapping("getAnnouncements")
+    public ResponseEntity getAnnouncements(@RequestParam(value="id", required=true) long id){
+    	
+    	if(!hackathons.containsKey(id)){
+    		return new ResponseEntity<EmptyJSONResponse>(new EmptyJSONResponse(), HttpStatus.OK);
+    	}
+    	
+    	Hackathon hackathon = hackathons.get(id);
+    	return new ResponseEntity<ArrayList<String>>(hackathon.getAnnouncements(), HttpStatus.OK);
+    }
+    
+    @RequestMapping("addAnnouncement")
+    public ResponseEntity addAnnouncement(@RequestParam(value="id", required=true) long id, @RequestParam(value="anouncement", required=true) String anouncement){
     	
     	if(!hackathons.containsKey(id)){
     		return new ResponseEntity<EmptyJSONResponse>(new EmptyJSONResponse(), HttpStatus.OK);
@@ -107,6 +141,17 @@ public class HubController {
     	Hackathon hackathon = hackathons.get(id);
     	hackathon.getAnnouncements().add(anouncement);
     	return new ResponseEntity<Hackathon>(hackathon, HttpStatus.OK); 
+    }
+    
+    @RequestMapping("getSchedule")
+    public ResponseEntity getSchedule(@RequestParam(value="id", required=true) long id){
+    	
+    	if(!hackathons.containsKey(id)){
+    		return new ResponseEntity<EmptyJSONResponse>(new EmptyJSONResponse(), HttpStatus.OK);
+    	}
+    	
+    	Hackathon hackathon = hackathons.get(id);
+    	return new ResponseEntity<ArrayList<String>>(hackathon.getSchedule(), HttpStatus.OK);
     }
     
     @RequestMapping("addEvent")
@@ -121,6 +166,17 @@ public class HubController {
     	return new ResponseEntity<Hackathon>(hackathon, HttpStatus.OK); 
     }
     
+    @RequestMapping("getFAQs")
+    public ResponseEntity getFAQs(@RequestParam(value="id", required=true) long id){
+    	
+    	if(!hackathons.containsKey(id)){
+    		return new ResponseEntity<EmptyJSONResponse>(new EmptyJSONResponse(), HttpStatus.OK);
+    	}
+    	
+    	Hackathon hackathon = hackathons.get(id);
+    	return new ResponseEntity<ArrayList<String>>(hackathon.getFaqs(), HttpStatus.OK);
+    }
+    
     @RequestMapping("addFAQ")
     public ResponseEntity addFAQ(@RequestParam(value="id", required=true) long id, @RequestParam(value="faq", required=true) String faq){
     	
@@ -131,6 +187,17 @@ public class HubController {
     	Hackathon hackathon = hackathons.get(id);
     	hackathon.getFaqs().add(faq);
     	return new ResponseEntity<Hackathon>(hackathon, HttpStatus.OK); 
+    }
+    
+    @RequestMapping("getMentors")
+    public ResponseEntity getMentors(@RequestParam(value="id", required=true) long id){
+    	
+    	if(!hackathons.containsKey(id)){
+    		return new ResponseEntity<EmptyJSONResponse>(new EmptyJSONResponse(), HttpStatus.OK);
+    	}
+    	
+    	Hackathon hackathon = hackathons.get(id);
+    	return new ResponseEntity<ArrayList<String>>(hackathon.getMentors(), HttpStatus.OK);
     }
     
     @RequestMapping("addMentor")

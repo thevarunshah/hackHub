@@ -1,7 +1,5 @@
 package app;
 
-import java.util.ArrayList;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Organizer {
@@ -9,12 +7,15 @@ public class Organizer {
 	private final String username;
 	@JsonIgnore
 	private String password;
-	private ArrayList<Hackathon> hackathons = new ArrayList<Hackathon>();
+	private final String name;
+	private String email;
 	
-	public Organizer(String username, String password){
+	public Organizer(String username, String password, String name, String email){
 		
 		this.username = username;
 		this.password = password;
+		this.name = name;
+		this.email = email;
 	}
 
 	public String getPassword() {
@@ -29,7 +30,15 @@ public class Organizer {
 		return username;
 	}
 
-	public ArrayList<Hackathon> getHackathons() {
-		return hackathons;
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getName() {
+		return name;
 	}
 }
