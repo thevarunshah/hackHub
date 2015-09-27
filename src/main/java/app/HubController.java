@@ -54,6 +54,15 @@ public class HubController {
     	return new EmptyJSONResponse();
     }
     
+    /**
+     * register an organizer
+     * 
+     * @param username username of the organizer
+     * @param password password of the organizer
+     * @param name name of the organizer
+     * @param email email of the organizer
+     * @return organizer info if successful, empty json if username already exists
+     */
     @RequestMapping("/register")
     public ResponseEntity register(@RequestParam(value="username", required=true) String username, @RequestParam(value="password", required=true) String password,
     								@RequestParam(value="name", required=true) String name, @RequestParam(value="email", required=true) String email){
@@ -67,7 +76,14 @@ public class HubController {
     	return new ResponseEntity<Organizer>(organizer, HttpStatus.OK);
     }
     
-    @RequestMapping("login")
+    /**
+     * login in an organizer
+     * 
+     * @param username username of the organizer
+     * @param password password of the organizer
+     * @return organizer info if successful, empty json if invalid username or password
+     */
+    @RequestMapping("/login")
     public ResponseEntity login(@RequestParam(value="username", required=true) String username, @RequestParam(value="password", required=true) String password){
     	
     	if(organizers.containsKey(username)){
@@ -81,12 +97,27 @@ public class HubController {
     	return new ResponseEntity<EmptyJSONResponse>(new EmptyJSONResponse(), HttpStatus.OK);
     }
     
+    /**
+     * get all hackathons
+     * 
+     * @return all open hackathons
+     */
     @RequestMapping("/allHackathons")
     public Collection<Hackathon> allHackathons(){
     	
     	return hackathons.values();
     }
 
+    /**
+     * register a new hackathon
+     * 
+     * @param name name of the hackathon
+     * @param location location of the hackathon
+     * @param startDate start date of the hackathon
+     * @param endDate end date of the hackathon
+     * @param organizerUsername username of the organizer creating this hackathon
+     * @return hackathon info for the hackathon created
+     */
     @RequestMapping("/newHackathon")
     public Hackathon newHackathon(@RequestParam(value="name", required=true) String name, @RequestParam(value="location", required=true) String location,
     								@RequestParam(value="startDate", required=true) String startDate, @RequestParam(value="endDate", required=true) String endDate,
@@ -98,6 +129,12 @@ public class HubController {
         return hackathon;
     }
     
+    /**
+     * get information about a specific hackathon
+     * 
+     * @param id id of the hackathon
+     * @return hackathon information if id exists, empty json if invalid id
+     */
     @RequestMapping("/getHackathon")
     public ResponseEntity getHackathon(@RequestParam(value="id", required=true) long id){
     	
@@ -108,7 +145,19 @@ public class HubController {
     	return new ResponseEntity<EmptyJSONResponse>(new EmptyJSONResponse(), HttpStatus.OK);
     }
     
-    @RequestMapping("updateHackathon")
+    /**
+     * update information about a hackathon
+     * 
+     * @param id id of the hackathon to be updated
+     * @param location new location (optional)
+     * @param startDate new start date (optional)
+     * @param endDate new end date (optional)
+     * @param link new link (optional)
+     * @param applicationOpenDate new application open date (optional)
+     * @param description new description (optional)
+     * @return hacakthon information if updated, empty json if invalid id
+     */
+    @RequestMapping("/updateHackathon")
     public ResponseEntity updateHackathon(@RequestParam(value="id", required=true) long id,
     										@RequestParam(value="location") String location, @RequestParam(value="startDate") String startDate, @RequestParam(value="endDate") String endDate,
     										@RequestParam(value="link") String link, @RequestParam(value="applicationOpenDate") String applicationOpenDate, 
@@ -141,7 +190,13 @@ public class HubController {
     	return new ResponseEntity<Hackathon>(hackathon, HttpStatus.OK); 
     }
     
-    @RequestMapping("getAnnouncements")
+    /**
+     * get all announcements for a hackathon
+     * 
+     * @param id id of the hackathon
+     * @return list of all announcements, empty json if invalid id
+     */
+    @RequestMapping("/getAnnouncements")
     public ResponseEntity getAnnouncements(@RequestParam(value="id", required=true) long id){
     	
     	if(!hackathons.containsKey(id)){
@@ -152,7 +207,14 @@ public class HubController {
     	return new ResponseEntity<ArrayList<String>>(hackathon.getAnnouncements(), HttpStatus.OK);
     }
     
-    @RequestMapping("addAnnouncement")
+    /**
+     * add new announcement to hackathon
+     * 
+     * @param id if of the hackathon
+     * @param anouncement new announcement
+     * @return hackathon information if successful, empty json if invalid id
+     */
+    @RequestMapping("/addAnnouncement")
     public ResponseEntity addAnnouncement(@RequestParam(value="id", required=true) long id, @RequestParam(value="anouncement", required=true) String anouncement){
     	
     	if(!hackathons.containsKey(id)){
@@ -164,7 +226,13 @@ public class HubController {
     	return new ResponseEntity<Hackathon>(hackathon, HttpStatus.OK); 
     }
     
-    @RequestMapping("getSchedule")
+    /**
+     * get the schedule of events for the hackathon
+     * 
+     * @param id id of the hackathon
+     * @return schedule of events if successful, empty json if invalid id
+     */
+    @RequestMapping("/getSchedule")
     public ResponseEntity getSchedule(@RequestParam(value="id", required=true) long id){
     	
     	if(!hackathons.containsKey(id)){
@@ -175,7 +243,14 @@ public class HubController {
     	return new ResponseEntity<ArrayList<String>>(hackathon.getSchedule(), HttpStatus.OK);
     }
     
-    @RequestMapping("addEvent")
+    /**
+     * adding a new event to the schedule
+     * 
+     * @param id id of the hackathon
+     * @param event event description
+     * @return hackathon information if successful, empty json if invalid id
+     */
+    @RequestMapping("/addEvent")
     public ResponseEntity addEvent(@RequestParam(value="id", required=true) long id, @RequestParam(value="event", required=true) String event){
     	
     	if(!hackathons.containsKey(id)){
@@ -187,7 +262,13 @@ public class HubController {
     	return new ResponseEntity<Hackathon>(hackathon, HttpStatus.OK); 
     }
     
-    @RequestMapping("getFAQs")
+    /**
+     * get all of the FAQs for the hackathon
+     * 
+     * @param id id of the hackathon
+     * @return all of the FAQs if successful, empty json if invalid id
+     */
+    @RequestMapping("/getFAQs")
     public ResponseEntity getFAQs(@RequestParam(value="id", required=true) long id){
     	
     	if(!hackathons.containsKey(id)){
@@ -198,7 +279,14 @@ public class HubController {
     	return new ResponseEntity<ArrayList<String>>(hackathon.getFaqs(), HttpStatus.OK);
     }
     
-    @RequestMapping("addFAQ")
+    /**
+     * add a new FAQ to a hackathon
+     * 
+     * @param id id of the hackathon
+     * @param faq new FAQ details
+     * @return hacktahon information if successful, empty json if invalid id 
+     */
+    @RequestMapping("/addFAQ")
     public ResponseEntity addFAQ(@RequestParam(value="id", required=true) long id, @RequestParam(value="faq", required=true) String faq){
     	
     	if(!hackathons.containsKey(id)){
@@ -210,7 +298,13 @@ public class HubController {
     	return new ResponseEntity<Hackathon>(hackathon, HttpStatus.OK); 
     }
     
-    @RequestMapping("getMentors")
+    /**
+     * get list of mentors for the hackathon
+     * 
+     * @param id id of the hackathon
+     * @return list of mentors if successful, empty json if invalid id
+     */
+    @RequestMapping("/getMentors")
     public ResponseEntity getMentors(@RequestParam(value="id", required=true) long id){
     	
     	if(!hackathons.containsKey(id)){
@@ -221,7 +315,14 @@ public class HubController {
     	return new ResponseEntity<ArrayList<String>>(hackathon.getMentors(), HttpStatus.OK);
     }
     
-    @RequestMapping("addMentor")
+    /**
+     * add a new mentor for this hackathon
+     * 
+     * @param id id of the hackathon
+     * @param mentor information about the new mentor
+     * @return hackathon information if successful, empty json if invalid id
+     */
+    @RequestMapping("/addMentor")
     public ResponseEntity addMentor(@RequestParam(value="id", required=true) long id, @RequestParam(value="mentor", required=true) String mentor){
     	
     	if(!hackathons.containsKey(id)){
