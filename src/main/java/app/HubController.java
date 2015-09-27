@@ -23,12 +23,33 @@ public class HubController {
     public EmptyJSONResponse demo(){
     	
     	Organizer demo = new Organizer("demo", "pass", "Varun Shah", "contact@hackru.org");
+    	organizers.put("demo", demo);
+    	
     	Hackathon hackRU = new Hackathon(hackathonsID.incrementAndGet(), "hackRU", "Rutgers", "10/03/15", "10/04/15", demo);
     	hackRU.setDescription("the best hackathon");
     	hackRU.getAnnouncements().add("registration closed!");
     	hackRU.getAnnouncements().add("get pumped!");
+    	hackRU.getFaqs().add("Who can attend? Current high school and university students can attend HackRU! All attendees are expected to adhere to the Major League Hacking Code of Conduct.");
+    	hackRU.getFaqs().add("Will there be food? We will provide food from the beginning to the end. Everything will be provided by us for you.");
+    	hackRU.getFaqs().add("I have another question! If you have any questions or concerns regarding HackRU contact us at team@hackru.org.");
     	hackathons.put(hackRU.getId(), hackRU);
-    	organizers.put("demo", demo);
+    	
+    	Hackathon hackNY = new Hackathon(hackathonsID.incrementAndGet(), "hackNY", "NYU", "09/26/15", "09/27/15", demo);
+    	hackNY.setDescription("great hackathon");
+    	hackNY.getAnnouncements().add("good luck!");
+    	hackNY.getAnnouncements().add("dinner on the 13th floor!");
+    	hackNY.getAnnouncements().add("insomnia cookies and tshirts - 13th floor!");
+    	hackNY.getSchedule().add("12:00pm - Doors Open to Attendees; Lunch is Served (main hallway, outside Auditorium)");
+    	hackNY.getSchedule().add("01:00pm - Opening Ceremonies, & NYC Startup API Presentations");
+    	hackNY.getSchedule().add("03:00pm - Hacking Begins (see below for room list on Saturday)");
+    	hackNY.getSchedule().add("03:30pm - Workshop: Hacker Orientation with Shy Ruparel, Major League Hacking (Room 312, see below for description)");
+    	hackNY.getSchedule().add("04:30pm - Workshop: Introduction to Node.js with Justin Woo (Room 317, see below for description)");
+    	hackNY.getSchedule().add("05:30pm - Workshop: Introduction to ReactJS with Sam Agnew (Room 312, see below for description)");
+    	hackNY.getSchedule().add("06:00pm Ladies Storm Hackathons Meetup (Room 101)");
+    	hackNY.getSchedule().add("07:30pm Dinner is Served (13th Floor Lounge)");
+    	hackNY.getMentors().add("Shy Ruparel, Deputy Commissioner at Major League Hacking");
+    	hackNY.getMentors().add("Cassidy Williams, Software Engineer & Developer Evangelist at Clarifai");
+    	hackathons.put(hackNY.getId(), hackNY);
     	
     	return new EmptyJSONResponse();
     }
