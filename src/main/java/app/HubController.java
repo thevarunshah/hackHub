@@ -26,12 +26,18 @@ public class HubController {
     	organizers.put("demo", demo);
     	
     	Hackathon hackRU = new Hackathon(hackathonsID.incrementAndGet(), "hackRU", "Rutgers", "10/03/15", "10/04/15", demo);
-    	hackRU.setDescription("the best hackathon");
+    	hackRU.setDescription("HackRU is a biannual hackathon at Rutgers University. You'll get free food, quality swag and meet awesome people. "
+    			+ "It's the largest student-run educational event at Rutgers, and the second oldest student-run hackathon in the country. Come envision, build and demo your cool and original project!");
     	hackRU.getAnnouncements().add("registration closed!");
     	hackRU.getAnnouncements().add("get pumped!");
+    	hackRU.getSchedule().add("Check-in for HackRU will be from 10am-12pm on Saturday morning.");
+    	hackRU.getSchedule().add("The opening ceremony will begin at 12pm.");
+    	hackRU.getSchedule().add("HackRU will end around 4pm on Sunday.");
     	hackRU.getFaqs().add("Who can attend? Current high school and university students can attend HackRU! All attendees are expected to adhere to the Major League Hacking Code of Conduct.");
     	hackRU.getFaqs().add("Will there be food? We will provide food from the beginning to the end. Everything will be provided by us for you.");
     	hackRU.getFaqs().add("I have another question! If you have any questions or concerns regarding HackRU contact us at team@hackru.org.");
+    	hackRU.getMentors().add("Varun Shah, varun.shah@rutgers.edu");
+    	hackRU.getMentors().add("Viral Jogani, viral.jogani@rutgers.edu");
     	hackathons.put(hackRU.getId(), hackRU);
     	
     	Hackathon hackNY = new Hackathon(hackathonsID.incrementAndGet(), "hackNY", "NYU", "09/26/15", "09/27/15", demo);
@@ -39,6 +45,7 @@ public class HubController {
     	hackNY.getAnnouncements().add("good luck!");
     	hackNY.getAnnouncements().add("dinner on the 13th floor!");
     	hackNY.getAnnouncements().add("insomnia cookies and tshirts - 13th floor!");
+    	hackNY.getAnnouncements().add("blue hoodie - lost and found - claim it in 1302");
     	hackNY.getSchedule().add("12:00pm - Doors Open to Attendees; Lunch is Served (main hallway, outside Auditorium)");
     	hackNY.getSchedule().add("01:00pm - Opening Ceremonies, & NYC Startup API Presentations");
     	hackNY.getSchedule().add("03:00pm - Hacking Begins (see below for room list on Saturday)");
@@ -211,18 +218,18 @@ public class HubController {
      * add new announcement to hackathon
      * 
      * @param id if of the hackathon
-     * @param anouncement new announcement
+     * @param announcement new announcement
      * @return hackathon information if successful, empty json if invalid id
      */
     @RequestMapping("/addAnnouncement")
-    public ResponseEntity addAnnouncement(@RequestParam(value="id", required=true) long id, @RequestParam(value="anouncement", required=true) String anouncement){
+    public ResponseEntity addAnnouncement(@RequestParam(value="id", required=true) long id, @RequestParam(value="announcement", required=true) String announcement){
     	
     	if(!hackathons.containsKey(id)){
     		return new ResponseEntity<EmptyJSONResponse>(new EmptyJSONResponse(), HttpStatus.OK);
     	}
     	
     	Hackathon hackathon = hackathons.get(id);
-    	hackathon.getAnnouncements().add(anouncement);
+    	hackathon.getAnnouncements().add(announcement);
     	return new ResponseEntity<Hackathon>(hackathon, HttpStatus.OK); 
     }
     
