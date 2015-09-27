@@ -3,6 +3,8 @@ package app;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,26 +18,29 @@ public class HubController {
     private HashMap<Long, Hackathon> hackathons = new HashMap<Long, Hackathon>();
     
     @RequestMapping("/register")
-    public Organizer register(@RequestParam(value="username", required=true) String username, @RequestParam(value="password", required=true) String password){
+    public ResponseEntity register(@RequestParam(value="username", required=true) String username, @RequestParam(value="password", required=true) String password){
     	
     	if(organizers.containsKey(username)){
-    		return null;
+    		return new ResponseEntity<EmptyJSONResponse>(new EmptyJSONResponse(), HttpStatus.OK);
     	}
     	
     	Organizer organizer = new Organizer(username, password);
     	organizers.put(organizer.getUsername(), organizer);
-    	return organizer;
+    	return new ResponseEntity<Organizer>(organizer, HttpStatus.OK);
     }
     
     @RequestMapping("login")
-    public Organizer login(@RequestParam(value="username", required=true) String username, @RequestParam(value="password", required=true) String password){
+    public ResponseEntity login(@RequestParam(value="username", required=true) String username, @RequestParam(value="password", required=true) String password){
     	
-    	Organizer organizer = organizers.get(username);
-    	if(organizer.getPassword().equals(password)){
-    		return organizer;
+    	if(organizers.containsKey(username)){
+    		Organizer organizer = organizers.get(username);
+    		
+	    	if(organizer.getPassword().equals(password)){
+	    		return new ResponseEntity<Organizer>(organizer, HttpStatus.OK);
+	    	}
     	}
     	
-    	return null;
+    	return new ResponseEntity<EmptyJSONResponse>(new EmptyJSONResponse(), HttpStatus.OK);
     }
 
     @RequestMapping("/newHackathon")
@@ -50,12 +55,12 @@ public class HubController {
     }
     
     @RequestMapping("/getHackathon")
-    public Hackathon getHackathon(@RequestParam(value="id", required=true) long id) {
+    public ResponseEntity getHackathon(@RequestParam(value="id", required=true) long id) {
     	
     	if(hackathons.containsKey(id)){
-    		return hackathons.get(id);
+    		return new ResponseEntity<Hackathon>(hackathons.get(id), HttpStatus.OK);
     	}
     	
-        return null;
+    	return new ResponseEntity<EmptyJSONResponse>(new EmptyJSONResponse(), HttpStatus.OK);
     }
 }
