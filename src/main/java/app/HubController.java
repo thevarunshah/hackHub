@@ -55,12 +55,93 @@ public class HubController {
     }
     
     @RequestMapping("/getHackathon")
-    public ResponseEntity getHackathon(@RequestParam(value="id", required=true) long id) {
+    public ResponseEntity getHackathon(@RequestParam(value="id", required=true) long id){
     	
     	if(hackathons.containsKey(id)){
     		return new ResponseEntity<Hackathon>(hackathons.get(id), HttpStatus.OK);
     	}
     	
     	return new ResponseEntity<EmptyJSONResponse>(new EmptyJSONResponse(), HttpStatus.OK);
+    }
+    
+    @RequestMapping("updateHackathon")
+    public ResponseEntity updateHackathon(@RequestParam(value="id", required=true) long id,
+    										@RequestParam(value="location") String location, @RequestParam(value="startDate") String startDate, @RequestParam(value="endDate") String endDate,
+    										@RequestParam(value="link") String link, @RequestParam(value="applicationOpenDate") String applicationOpenDate, 
+    										@RequestParam(value="description") String description){
+    	
+    	if(!hackathons.containsKey(id)){
+    		return new ResponseEntity<EmptyJSONResponse>(new EmptyJSONResponse(), HttpStatus.OK);
+    	}
+    	
+    	Hackathon hackathon = hackathons.get(id);
+    	if(location != null){
+    		hackathon.setLocation(location);
+    	}
+    	if(startDate != null){
+    		hackathon.setStartDate(startDate);
+    	}
+    	if(endDate != null){
+    		hackathon.setEndDate(endDate);
+    	}
+    	if(link != null){
+    		hackathon.setLink(link);
+    	}
+    	if(applicationOpenDate != null){
+    		hackathon.setApplicationOpenDate(applicationOpenDate);
+    	}
+    	if(description != null){
+    		hackathon.setDescription(description);
+    	}
+    	
+    	return new ResponseEntity<Hackathon>(hackathon, HttpStatus.OK); 
+    }
+    
+    @RequestMapping("addAnouncement")
+    public ResponseEntity addAnouncement(@RequestParam(value="id", required=true) long id, @RequestParam(value="anouncement", required=true) String anouncement){
+    	
+    	if(!hackathons.containsKey(id)){
+    		return new ResponseEntity<EmptyJSONResponse>(new EmptyJSONResponse(), HttpStatus.OK);
+    	}
+    	
+    	Hackathon hackathon = hackathons.get(id);
+    	hackathon.getAnnouncements().add(anouncement);
+    	return new ResponseEntity<Hackathon>(hackathon, HttpStatus.OK); 
+    }
+    
+    @RequestMapping("addEvent")
+    public ResponseEntity addEvent(@RequestParam(value="id", required=true) long id, @RequestParam(value="event", required=true) String event){
+    	
+    	if(!hackathons.containsKey(id)){
+    		return new ResponseEntity<EmptyJSONResponse>(new EmptyJSONResponse(), HttpStatus.OK);
+    	}
+    	
+    	Hackathon hackathon = hackathons.get(id);
+    	hackathon.getSchedule().add(event);
+    	return new ResponseEntity<Hackathon>(hackathon, HttpStatus.OK); 
+    }
+    
+    @RequestMapping("addFAQ")
+    public ResponseEntity addFAQ(@RequestParam(value="id", required=true) long id, @RequestParam(value="faq", required=true) String faq){
+    	
+    	if(!hackathons.containsKey(id)){
+    		return new ResponseEntity<EmptyJSONResponse>(new EmptyJSONResponse(), HttpStatus.OK);
+    	}
+    	
+    	Hackathon hackathon = hackathons.get(id);
+    	hackathon.getFaqs().add(faq);
+    	return new ResponseEntity<Hackathon>(hackathon, HttpStatus.OK); 
+    }
+    
+    @RequestMapping("addMentor")
+    public ResponseEntity addMentor(@RequestParam(value="id", required=true) long id, @RequestParam(value="mentor", required=true) String mentor){
+    	
+    	if(!hackathons.containsKey(id)){
+    		return new ResponseEntity<EmptyJSONResponse>(new EmptyJSONResponse(), HttpStatus.OK);
+    	}
+    	
+    	Hackathon hackathon = hackathons.get(id);
+    	hackathon.getMentors().add(mentor);
+    	return new ResponseEntity<Hackathon>(hackathon, HttpStatus.OK); 
     }
 }

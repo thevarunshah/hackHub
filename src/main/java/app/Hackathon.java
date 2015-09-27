@@ -16,7 +16,7 @@ public class Hackathon {
     private String description = "";
     private ArrayList<String> announcements = new ArrayList<String>();
     private ArrayList<String> schedule = new ArrayList<String>();
-    private ArrayList<String> faq = new ArrayList<String>();
+    private ArrayList<String> faqs = new ArrayList<String>();
     private ArrayList<String> mentors = new ArrayList<String>();
 
     public Hackathon(long id, String name, String location, String startDate, String endDate, Organizer organizer) {
@@ -96,8 +96,8 @@ public class Hackathon {
 		return schedule;
 	}
 
-	public ArrayList<String> getFaq() {
-		return faq;
+	public ArrayList<String> getFaqs() {
+		return faqs;
 	}
 
 	public ArrayList<String> getMentors() {
